@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
-from . import models, schemas
+import models
+import schemas
 
 def get_production(db: Session, production_id: int):
     return db.query(models.Production).filter(models.Production.id == production_id).first()
