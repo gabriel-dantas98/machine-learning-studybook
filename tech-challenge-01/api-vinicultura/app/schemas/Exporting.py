@@ -20,4 +20,4 @@ class Exporting(ExportingBase):
   category: str
   
   class Config:
-    orm_mode = True
+    from_attributes = True
