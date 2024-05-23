@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Float, Integer, String
-from ..core.database import Base
+from core.database import Base
 
 class Production(Base):
   __tablename__ = "production"

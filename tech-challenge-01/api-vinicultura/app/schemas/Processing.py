@@ -20,4 +20,4 @@ class Processing(ProcessingBase):
   category: str
   
   class Config:
-    orm_mode = True
+    from_attributes = True
