@@ -5,7 +5,7 @@ from models.Production import Production
 def get_production(db: Session, production_id: int):
     return db.query(Production).filter(Production.id == production_id).first()
 
-def get_productions(db: Session, skip: int = 0, limit: int = 100):
+def get_all_production(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Production).offset(skip).limit(limit).all()
 
 def create_production(db: Session, production: schemas.ProductionCreate):
