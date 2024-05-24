@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Float, Integer, String
-from ..core.database import Base
+from core.database import Base
 
 class Commercialization(Base):
   __tablename__ = "commercialization"
