@@ -1,5 +1,9 @@
 import schemas
+import uuid
+import pandas as pd
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError 
+
 from models.Importing import Importing
 
 def get_importing(db: Session, importing_id: int):
@@ -14,3 +18,35 @@ def create_importing(db: Session, importing: schemas.ImportingCreate):
     db.commit()
     db.refresh(db_importing)
     return db_importing
+
+def transform(db: Session):
+    path = "./ImpVinhos.csv"
+
+    df = pd.read_csv(path, sep=";", encoding="utf-8")
+    year_columns = [col for col in df.columns if col.isdigit()]
+
+    df_melted = df.melt(id_vars=["Id", 'País'], var_name='ano', value_name='valor')
+    df_final = df_melted.groupby('ano').apply(lambda x: x.groupby(x.columns, axis=1).sum()).reset_index(drop=True)
+
+    df_final.to_csv("ImpVinhos_transformed.csv", index=False)
+    df_final['id'] = [uuid.uuid4() for _ in range(len(df_final))]
+
+    for idx, row, in df_final.iterrows():
+        db_importing = Importing(
+            id=row['id'],
+            year=row['ano'],
+            value=row['valor'],
+            country=row['País']
+        )
+
+        try:
+            db.add(db_importing)
+            db.commit()
+            db.refresh(db_importing)
+        except SQLAlchemyError as e:
+            db.rollback()
+            print(f"Error when inserting {row}: {e}")
+        finally:
+            db.close()
+
+    return "Transforming Imp OK!"

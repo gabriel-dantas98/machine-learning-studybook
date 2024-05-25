@@ -11,3 +11,8 @@ router = APIRouter()
 def read_all_commercialization(skip: int = 0, limit: int = 100, db: Session = Depends(get_database)) -> Any:
     all_commercialization = commercialization.get_all_commercialization(db, skip=skip, limit=limit)
     return all_commercialization
+
+
+@router.get("/parse")
+def parse_commercialization(db: Session = Depends(get_database)) -> Any:
+    return commercialization.transform(db)

@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class CommercializationBase(BaseModel):
-  id: int
+  id: str
   control: str
   product: str
   year: int
@@ -12,7 +12,7 @@ class CommercializationCreate(CommercializationBase):
   pass
 
 class Commercialization(CommercializationBase):
-  id: int
+  id: str
   control: str
   product: str
   year: int

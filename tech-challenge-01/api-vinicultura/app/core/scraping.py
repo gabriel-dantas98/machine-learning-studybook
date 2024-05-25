@@ -41,7 +41,6 @@ def get_table_content(soup):
           cols = row.find_all('td')
           cols = [col.text.strip() for col in cols]
 
-
 categories = {
     'opt_02': 'Produção',
     'opt_03': 'Processamento',

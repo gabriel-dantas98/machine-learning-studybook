@@ -11,3 +11,7 @@ router = APIRouter()
 def read_productions(skip: int = 0, limit: int = 100, db: Session = Depends(get_database)) -> Any:
     productions = production.get_all_production(db, skip=skip, limit=limit)
     return productions
+
+@router.get("/parse")
+def parse_productions(db: Session = Depends(get_database)) -> Any:
+    return production.transform(db)

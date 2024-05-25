@@ -1,5 +1,8 @@
 import schemas
+import uuid
+import pandas as pd
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError 
 from models.Production import Production
 
 def get_production(db: Session, production_id: int):
@@ -14,3 +17,48 @@ def create_production(db: Session, production: schemas.ProductionCreate):
     db.commit()
     db.refresh(db_production)
     return db_production
+
+def transform(db: Session):
+    path = "./Producao.csv"
+    df = pd.read_csv(path, delimiter=";")
+    df.head()
+    df_melted = df.melt(id_vars=['id', 'produto'], var_name='ano', value_name='valor')
+
+    df_to_transform = df_melted.copy()
+    categoria_atual = None
+    for idx, row in df_to_transform.iterrows():
+        if row['produto'].isupper():
+            categoria_atual = row['produto']
+        else:
+            df_to_transform.loc[idx, 'categoria'] = categoria_atual
+
+    df_final = df_to_transform[df_to_transform['categoria'].notnull()]
+    df_final['product_id'] = [uuid.uuid4() for _ in range(len(df_final))]
+
+    df_final.to_csv("Producao_transformed.csv", index=False)
+    
+    for idx, row in df_final.iterrows():
+        if row['ano'] == "control":
+            continue
+
+        production_data = {
+            "id": row['product_id'],
+            "product": row['produto'],
+            "year": row['ano'],
+            "value": row['valor'],
+            "category": row['categoria'],
+        }
+
+        db_production = Production(**production_data)
+
+        try:
+            db.add(db_production)
+            db.commit()
+            db.refresh(db_production)
+        except SQLAlchemyError as e:
+            db.rollback()
+            print(f"Error when inserting {row}: {e}")
+        finally:
+            db.close()
+
+    return "inseri os items"

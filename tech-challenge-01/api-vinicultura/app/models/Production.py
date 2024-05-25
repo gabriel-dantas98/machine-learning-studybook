@@ -4,8 +4,7 @@ from core.database import Base
 class Production(Base):
   __tablename__ = "production"
   
-  id = Column(Integer, primary_key=True, index=True)
-  control = Column(String)
+  id = Column(String, primary_key=True, index=True)
   product = Column(String)
   year = Column(Integer)
   value = Column(Float)

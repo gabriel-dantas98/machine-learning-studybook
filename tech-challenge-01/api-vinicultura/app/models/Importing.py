@@ -4,9 +4,7 @@ from core.database import Base
 class Importing(Base):
   __tablename__ = "importing"
   
-  id = Column(Integer, primary_key=True, index=True)
-  control = Column(String)
-  product = Column(String)
-  year = Column(Integer)
+  id = Column(String, primary_key=True, index=True)
+  country = Column(String)
+  year = Column(String)
   value = Column(Float)
-  category = Column(String)
