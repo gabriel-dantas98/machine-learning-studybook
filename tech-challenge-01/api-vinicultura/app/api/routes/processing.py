@@ -11,3 +11,7 @@ router = APIRouter()
 def read_all_processing(skip: int = 0, limit: int = 100, db: Session = Depends(get_database)) -> Any:
     all_processing = processing.get_all_processing(db, skip=skip, limit=limit)
     return all_processing
+
+@router.get("/parse")
+def parse_processing(db: Session = Depends(get_database)) -> Any:
+    return processing.transform(db)

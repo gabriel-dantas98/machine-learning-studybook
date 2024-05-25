@@ -1,5 +1,9 @@
 import schemas
+import uuid
+import pandas as pd
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError 
+
 from models.Commercialization import Commercialization
 
 def get_commercialization(db: Session, commercialization_id: int):
@@ -14,3 +18,44 @@ def create_commercialization(db: Session, commercialization: schemas.Commerciali
     db.commit()
     db.refresh(db_commercialization)
     return db_commercialization
+
+def transform(db: Session):
+    path = "./Comercio.csv"
+    years = [str(year) for year in range(1970, 2023)]
+    columns = [*["id", "control", "produto"], *years]
+
+    df = pd.read_csv(path, sep=";", encoding="utf-8", names=columns)
+    df_melted = df.melt(id_vars=['id', 'control', 'produto'], var_name='ano', value_name='valor')
+    df_to_transform = df_melted.copy()
+
+    categoria_atual = None
+    for idx, row in df_to_transform.iterrows():
+        if row['control'].isupper():
+            categoria_atual = row['control']
+        else:
+            df_to_transform.loc[idx, 'categoria'] = categoria_atual
+
+    df_final = df_to_transform[df_to_transform['categoria'].notnull()]
+    df_final['product_id'] = [uuid.uuid4() for _ in range(len(df_final))]
+
+    for idx, row, in df_final.iterrows():
+        db_commercialization = Commercialization(
+            id=row['product_id'],
+            control=row['id'],
+            product=row['control'].strip(),
+            year=row['ano'],
+            value=row['valor'],
+            category=row['categoria']
+        )
+
+        try:
+            db.add(db_commercialization)
+            db.commit()
+            db.refresh(db_commercialization)
+        except SQLAlchemyError as e:
+            db.rollback()
+            print(f"Error when inserting {row}: {e}")
+        finally:
+            db.close()
+
+    return "Transforming Comercio OK!"
