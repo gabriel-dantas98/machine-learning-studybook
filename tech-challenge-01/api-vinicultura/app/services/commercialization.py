@@ -19,6 +19,11 @@ def create_commercialization(db: Session, commercialization: schemas.Commerciali
     db.refresh(db_commercialization)
     return db_commercialization
 
+def delete_commercialization(db: Session, commercialization: schemas.Commercialization):
+    db.query(Commercialization).filter(Commercialization.id == commercialization.id).delete()
+    db.commit()
+    return commercialization
+
 def transform(db: Session):
     path = "./Comercio.csv"
     years = [str(year) for year in range(1970, 2023)]

@@ -18,6 +18,11 @@ def create_production(db: Session, production: schemas.ProductionCreate):
     db.refresh(db_production)
     return db_production
 
+def delete_production(db: Session, production: schemas.Production):
+    db.query(Production).filter(Production.id == production.id).delete()
+    db.commit()
+    return production
+
 def transform(db: Session):
     path = "./Producao.csv"
     df = pd.read_csv(path, delimiter=";")

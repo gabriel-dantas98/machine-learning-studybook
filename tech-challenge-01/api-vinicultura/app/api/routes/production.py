@@ -12,6 +12,15 @@ def read_productions(skip: int = 0, limit: int = 100, db: Session = Depends(get_
     productions = production.get_all_production(db, skip=skip, limit=limit)
     return productions
 
-@router.get("/parse")
+@router.get("/{id}", response_model=schemas.Production)
+def get_by_production(id: str, db: Session = Depends(get_database)):
+    production = production.get_production(db, production_id=id)
+    return production
+
+@router.post("/", response_model=schemas.Production)
+def create_production(request: schemas.ProcessingCreate, db: Session = Depends(get_database)):
+    return production.create_production(db, production=request)
+
+@router.post("/utils/insert")
 def parse_productions(db: Session = Depends(get_database)) -> Any:
     return production.transform(db)
