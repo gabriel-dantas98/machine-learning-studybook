@@ -19,6 +19,11 @@ def create_importing(db: Session, importing: schemas.ImportingCreate):
     db.refresh(db_importing)
     return db_importing
 
+def delete_importing(db: Session, importing: schemas.Importing):
+    db.query(Importing).filter(Importing.id == importing.id).delete()
+    db.commit()
+    return importing
+
 def transform(db: Session):
     path = "./ImpVinhos.csv"
 

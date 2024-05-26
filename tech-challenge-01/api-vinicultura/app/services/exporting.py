@@ -19,6 +19,11 @@ def create_exporting(db: Session, exporting: schemas.ExportingCreate):
     db.refresh(db_exporting)
     return db_exporting
 
+def delete_exporting(db: Session, exporting: schemas.Exporting):
+    db.query(Exporting).filter(Exporting.id == exporting.id).delete()
+    db.commit()
+    return exporting
+
 def transform(db: Session):
     path = "./ExpVinho.csv"
     df = pd.read_csv(path, sep=";", encoding="utf-8")

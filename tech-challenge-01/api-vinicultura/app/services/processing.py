@@ -20,6 +20,10 @@ def create_processing(db: Session, processing: schemas.ProcessingCreate):
     db.refresh(db_processing)
     return db_processing
 
+def delete_processing(db: Session, processing: schemas.Processing):
+    db.query(Processing).filter(Processing.id == processing.id).delete()
+    db.commit()
+    return processing
 
 def transform(db: Session):
     path = "ProcessaViniferas.csv"
