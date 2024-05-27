@@ -1,15 +1,15 @@
+import logging
+import requests
 from typing import Any
 from fastapi import APIRouter
 from bs4 import BeautifulSoup
 from utils import scraping
-import requests
-import glob
 
 router = APIRouter()
 
 @router.get("/")
 def download() -> Any:
-    print("Hey im running download...")
+    logging.info("Running download...")
     base_url = 'http://vitibrasil.cnpuv.embrapa.br'
     YEARS = list(range(1970, 2023))
     categories = {
@@ -30,17 +30,14 @@ def download() -> Any:
 
         url = f'{base_url}/index.php?opcao={category_key}'
 
-        print("Getting data from:", url)
+        logging.info("Getting data from:", url)
         response = requests.get(url)
 
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'html.parser')
         else:
-            print('Failed when loading html:', response.status_code)
+            logging.error('Failed when loading html:', response.status_code)
 
         scraping.get_download_csv_link(soup, base_url)
 
-    return "OK"
-    
-def populate_database(): 
-    return ''
+    return "Download CSV files from site done!"

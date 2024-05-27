@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class ExportingBase(BaseModel):
-  id: str
+  id: int
   country: str
   year: str
   value: float
@@ -10,7 +10,7 @@ class ExportingCreate(ExportingBase):
   pass
 
 class Exporting(ExportingBase):
-  id: str
+  id: int
   country: str
   year: str
   value: float

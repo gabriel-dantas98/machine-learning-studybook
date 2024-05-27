@@ -1,19 +1,8 @@
 import requests
+import logging
 from bs4 import BeautifulSoup
 
 YEARS = list(range(1970, 2023))
-# http://vitibrasil.cnpuv.embrapa.br/index.php?opcao=opt_02
-# Estrutura dos dados
-#
-# Produção - opt_02
-# 
-# Processamento - opt_03
-#   Subprodutos 
-#     Viniferas, Americanas e hibridas, Uvas de mesa, sem classificação
-# Comercialização - opt_04
-#
-# Importação - opt_05
-# Exportação - opt_06
 
 def get_download_csv_link(soup):
   
@@ -22,15 +11,15 @@ def get_download_csv_link(soup):
   csv_filename = csv_url.split('/')[-1]
   full_csv_url = f'{base_url}/{csv_url}'
 
-  print('Downloading:', full_csv_url)
+  logging.info('Downloading:', full_csv_url)
   response = requests.get(full_csv_url)
 
   if response.status_code == 200:
       with open(csv_filename, 'wb') as file:
           file.write(response.content)
-      print('Download concluído com sucesso!')
+      logging.info('Download finished!!')
   else:
-      print('Falha ao fazer o download:', response.status_code)
+      logging.error('Failed downloading:', response.status_code)
 
 def get_table_content(soup):
 
@@ -55,13 +44,13 @@ for category_key in categories.keys():
 
   url = f'{base_url}/index.php?opcao={category_key}'
   
-  print("Getting data from:", url)
+  logging.info("Getting data from:", url)
   response = requests.get(url)
 
   if response.status_code == 200:
     soup = BeautifulSoup(response.text, 'html.parser')
   else:
-    print('Falha ao obter a página:', response.status_code)
+    logging.error('Falha ao obter a página:', response.status_code)
 
   
   get_download_csv_link(soup)

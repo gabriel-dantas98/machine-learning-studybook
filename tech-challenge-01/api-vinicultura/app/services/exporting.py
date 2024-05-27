@@ -1,5 +1,5 @@
 import schemas
-import uuid
+import logging
 import pandas as pd
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError 
@@ -32,11 +32,9 @@ def transform(db: Session):
     df_final = df_melted.groupby('ano').apply(lambda x: x.groupby(x.columns, axis=1).sum()).reset_index(drop=True)
 
     df_final.to_csv("ImpVinhos_transformed.csv", index=False)
-    df_final['id'] = [uuid.uuid4() for _ in range(len(df_final))]
 
     for idx, row, in df_final.iterrows():
         db_importing = Exporting(
-            id=row['id'],
             year=row['ano'],
             value=row['valor'],
             country=row['País']
@@ -48,7 +46,7 @@ def transform(db: Session):
             db.refresh(db_importing)
         except SQLAlchemyError as e:
             db.rollback()
-            print(f"Error when inserting {row}: {e}")
+            logging.error(f"Error when inserting {row}: {e}")
         finally:
             db.close()
 

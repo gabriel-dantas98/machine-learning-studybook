@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class ProductionBase(BaseModel):
-  id: str
+  id: int
   product: str
   year: int
   value: float
@@ -11,7 +11,7 @@ class ProductionCreate(ProductionBase):
   pass
 
 class Production(ProductionBase):
-  id: str
+  id: int
   product: str
   year: int
   value: float
