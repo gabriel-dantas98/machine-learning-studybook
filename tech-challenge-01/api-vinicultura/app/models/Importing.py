@@ -4,7 +4,7 @@ from core.database import Base
 class Importing(Base):
   __tablename__ = "importing"
   
-  id = Column(String, primary_key=True, index=True)
+  id = Column(Integer, primary_key=True, index=True)
   country = Column(String)
   year = Column(String)
   value = Column(Float)

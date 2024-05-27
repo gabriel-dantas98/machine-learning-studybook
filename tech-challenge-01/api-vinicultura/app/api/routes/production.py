@@ -8,12 +8,12 @@ import schemas
 router = APIRouter()
 
 @router.get("/", response_model=list[schemas.Production])
-def read_productions(skip: int = 0, limit: int = 100, db: Session = Depends(get_database)) -> Any:
+def get_all_productions(skip: int = 0, limit: int = 100, db: Session = Depends(get_database)) -> Any:
     productions = production.get_all_production(db, skip=skip, limit=limit)
     return productions
 
 @router.get("/{id}", response_model=schemas.Production)
-def get_by_production(id: str, db: Session = Depends(get_database)):
+def get_by_id(id: int, db: Session = Depends(get_database)):
     production = production.get_production(db, production_id=id)
     return production
 
@@ -21,6 +21,6 @@ def get_by_production(id: str, db: Session = Depends(get_database)):
 def create_production(request: schemas.ProcessingCreate, db: Session = Depends(get_database)):
     return production.create_production(db, production=request)
 
-@router.post("/utils/insert")
-def parse_productions(db: Session = Depends(get_database)) -> Any:
+@router.post("/import")
+def import_productions(db: Session = Depends(get_database)) -> Any:
     return production.transform(db)

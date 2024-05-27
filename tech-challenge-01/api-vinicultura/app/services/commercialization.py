@@ -1,5 +1,5 @@
 import schemas
-import uuid
+import logging
 import pandas as pd
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError 
@@ -7,7 +7,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from models.Commercialization import Commercialization
 
 def get_commercialization(db: Session, commercialization_id: int):
-    return db.query(Commercialization).filter(Commercialization.id == commercialization_id).first()
+    return db.query(Commercialization).filter(Commercialization.id == commercialization_id).first() is not None
 
 def get_all_commercialization(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Commercialization).offset(skip).limit(limit).all()
@@ -19,17 +19,20 @@ def create_commercialization(db: Session, commercialization: schemas.Commerciali
     db.refresh(db_commercialization)
     return db_commercialization
 
-def delete_commercialization(db: Session, commercialization: schemas.Commercialization):
-    db.query(Commercialization).filter(Commercialization.id == commercialization.id).delete()
-    db.commit()
-    return commercialization
+def delete_commercialization(db: Session, id: int):
+    commercialization = db.query(Commercialization).filter(Commercialization.id == id).first()
+    
+    if commercialization is not None:
+        db.delete(commercialization)
+        db.commit()
 
 def transform(db: Session):
-    path = "./Comercio.csv"
+    path = "./datasource/csv/Comercio.csv"
     years = [str(year) for year in range(1970, 2023)]
     columns = [*["id", "control", "produto"], *years]
 
     df = pd.read_csv(path, sep=";", encoding="utf-8", names=columns)
+    logging.info("dataframe loaded", df.count)
     df_melted = df.melt(id_vars=['id', 'control', 'produto'], var_name='ano', value_name='valor')
     df_to_transform = df_melted.copy()
 
@@ -41,11 +44,9 @@ def transform(db: Session):
             df_to_transform.loc[idx, 'categoria'] = categoria_atual
 
     df_final = df_to_transform[df_to_transform['categoria'].notnull()]
-    df_final['product_id'] = [uuid.uuid4() for _ in range(len(df_final))]
 
     for idx, row, in df_final.iterrows():
         db_commercialization = Commercialization(
-            id=row['product_id'],
             control=row['id'],
             product=row['control'].strip(),
             year=row['ano'],
@@ -59,8 +60,10 @@ def transform(db: Session):
             db.refresh(db_commercialization)
         except SQLAlchemyError as e:
             db.rollback()
-            print(f"Error when inserting {row}: {e}")
+            logging.error(f"Error when inserting {row}: {e}")
         finally:
             db.close()
+
+    logging.info("done importing data for commercialization...")
 
     return "Transforming Comercio OK!"

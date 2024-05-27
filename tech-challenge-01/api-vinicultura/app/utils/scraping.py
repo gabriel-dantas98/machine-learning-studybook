@@ -1,4 +1,5 @@
 import requests
+import logging
 
 def get_download_csv_link(soup, base_url):
   
@@ -7,16 +8,16 @@ def get_download_csv_link(soup, base_url):
   csv_filename = csv_url.split('/')[-1]
   full_csv_url = f'{base_url}/{csv_url}'
 
-  print('Downloading:', full_csv_url)
+  logging.info('Downloading:', full_csv_url)
 
   response = requests.get(full_csv_url)
 
   if response.status_code == 200:
       with open(csv_filename, 'wb') as file:
           file.write(response.content)
-      print('Download done!')
+      logging.info('Download done!')
   else:
-      print('Failed downloading:', full_csv_url, response.status_code)
+      logging.error('Failed downloading:', full_csv_url, response.status_code)
 
 def get_table_content(soup):
 

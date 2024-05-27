@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class ProcessingBase(BaseModel):
-  id: str
+  id: int
   control: str
   product: str
   year: int
@@ -12,7 +12,7 @@ class ProcessingCreate(ProcessingBase):
   pass
 
 class Processing(ProcessingBase):
-  id: str
+  id: int
   control: str
   product: str
   year: int

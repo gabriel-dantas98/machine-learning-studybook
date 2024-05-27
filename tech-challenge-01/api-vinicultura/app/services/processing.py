@@ -1,5 +1,5 @@
 import schemas
-import uuid
+import logging
 import pandas as pd
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError 
@@ -40,14 +40,12 @@ def transform(db: Session):
             df_to_transform.loc[idx, 'categoria'] = categoria_atual
 
     df_final = df_to_transform[df_to_transform['categoria'].notnull()]
-    df_final['product_id'] = [uuid.uuid4() for _ in range(len(df_final))]
     df_final['valor'] = df_final['valor'].apply(data_format.to_integer_or_zero)
 
     df_final.to_csv("ProcessaViniferas_transformed.csv", index=False)
 
     for idx, row in df_final.iterrows():
         db_processing = Processing(
-            id=row['product_id'],
             year=row['ano'],
             value=row['valor'],
             category=row['categoria'],
@@ -61,7 +59,7 @@ def transform(db: Session):
             db.refresh(db_processing)
         except SQLAlchemyError as e:
             db.rollback()
-            print(f"Error when inserting {row}: {e}")
+            logging.error(f"Error when inserting {row}: {e}")
         finally:
             db.close()
 
