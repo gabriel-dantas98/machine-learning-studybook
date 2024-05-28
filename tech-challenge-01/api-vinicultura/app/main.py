@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 
 from api.main import api_router
 from core.config import PROJECT_NAME
@@ -15,3 +16,7 @@ app = FastAPI(
 get_database()
 
 app.include_router(api_router)
+
+@app.get("/")
+def root():
+    return RedirectResponse("/docs")

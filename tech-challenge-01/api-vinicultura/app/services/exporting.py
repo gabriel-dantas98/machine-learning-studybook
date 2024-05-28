@@ -25,13 +25,11 @@ def delete_exporting(db: Session, exporting: schemas.Exporting):
     return exporting
 
 def transform(db: Session):
-    path = "./ExpVinho.csv"
+    path = "./datasource/csv/ExpVinho.csv"
     df = pd.read_csv(path, sep=";", encoding="utf-8")
 
     df_melted = df.melt(id_vars=["Id", 'País'], var_name='ano', value_name='valor')
     df_final = df_melted.groupby('ano').apply(lambda x: x.groupby(x.columns, axis=1).sum()).reset_index(drop=True)
-
-    df_final.to_csv("ImpVinhos_transformed.csv", index=False)
 
     for idx, row, in df_final.iterrows():
         db_importing = Exporting(
@@ -50,4 +48,6 @@ def transform(db: Session):
         finally:
             db.close()
 
-    return 'Exporting transform done!'
+    logging.info("done importing data for exporting...")
+
+    return "Transforming exporting OK!"

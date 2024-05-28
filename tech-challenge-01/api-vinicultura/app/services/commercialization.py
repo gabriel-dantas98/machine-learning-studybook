@@ -66,4 +66,4 @@ def transform(db: Session):
 
     logging.info("done importing data for commercialization...")
 
-    return "Transforming Comercio OK!"
+    return "Transforming commercialization OK!"
