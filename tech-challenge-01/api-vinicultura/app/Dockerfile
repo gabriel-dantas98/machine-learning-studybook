@@ -1,11 +1,12 @@
 FROM python:3.9
 
-WORKDIR /code
+WORKDIR /app
 
-COPY ./requirements.txt /code/requirements.txt
+COPY . .
 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+ENV PYTHONPATH=${PYTHONPATH}:${PWD}
+RUN pip3 install poetry fastapi uvicorn
+RUN poetry config virtualenvs.create false
+RUN poetry install --no-dev
 
-COPY ./app /code/app
-
-CMD ["fastapi", "run", "app/main.py", "--port", "80"]
+CMD ["fastapi", "run", "main.py", "--port", "10000", "--proxy-headers"]

@@ -26,7 +26,7 @@ def delete_processing(db: Session, processing: schemas.Processing):
     return processing
 
 def transform(db: Session):
-    path = "ProcessaViniferas.csv"
+    path = "./datasource/csv/ProcessaViniferas.csv"
 
     df = pd.read_csv(path, sep="\t", encoding="utf-8")
     df_melted = df.melt(id_vars=['id', 'control', 'cultivar'], var_name='ano', value_name='valor')
@@ -41,8 +41,6 @@ def transform(db: Session):
 
     df_final = df_to_transform[df_to_transform['categoria'].notnull()]
     df_final['valor'] = df_final['valor'].apply(data_format.to_integer_or_zero)
-
-    df_final.to_csv("ProcessaViniferas_transformed.csv", index=False)
 
     for idx, row in df_final.iterrows():
         db_processing = Processing(
@@ -63,4 +61,6 @@ def transform(db: Session):
         finally:
             db.close()
 
-    return "Transforming Processing OK!"
+    logging.info("done importing data for processing...")
+
+    return "Transforming processing OK!"

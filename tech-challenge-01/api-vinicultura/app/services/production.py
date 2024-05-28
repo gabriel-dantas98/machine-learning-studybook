@@ -24,7 +24,7 @@ def delete_production(db: Session, production: schemas.Production):
     return production
 
 def transform(db: Session):
-    path = "./Producao.csv"
+    path = "./datasource/csv/Producao.csv"
     df = pd.read_csv(path, delimiter=";")
     df.head()
     df_melted = df.melt(id_vars=['id', 'produto'], var_name='ano', value_name='valor')
@@ -38,7 +38,6 @@ def transform(db: Session):
             df_to_transform.loc[idx, 'categoria'] = categoria_atual
 
     df_final = df_to_transform[df_to_transform['categoria'].notnull()]
-    df_final.to_csv("Producao_transformed.csv", index=False)
     
     for idx, row in df_final.iterrows():
         if row['ano'] == "control":
@@ -63,4 +62,6 @@ def transform(db: Session):
         finally:
             db.close()
 
-    return "inseri os items"
+    logging.info("done importing data for production...")
+
+    return "Transforming production OK!"
