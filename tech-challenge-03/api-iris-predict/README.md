@@ -27,13 +27,15 @@ Este projeto implementa uma API baseada em FastAPI para prever espécies de flor
 1. Importe o conjunto de dados usando o endpoint `/import-dataset`
 2. Faça previsões usando o endpoint `/predict` com entrada JSON:
 
-```json
-{
-  "sepal_length": 5.1,
-  "sepal_width": 3.5,
-  "petal_length": 1.4,
-  "petal_width": 0.2
-}
+```bash
+curl -X POST "http://localhost:8080/predict" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "sepal_length": 5.1,
+           "sepal_width": 3.5,
+           "petal_length": 1.4,
+           "petal_width": 0.2
+         }'
 ```
 
 ## Tecnologias Utilizadas
