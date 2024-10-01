@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:16-bullseye
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - app-db-data:/var/lib/postgresql/data/pgdata
+    # env_file:
+    #   - .env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=iris
+
+volumes:
+  app-db-data:
