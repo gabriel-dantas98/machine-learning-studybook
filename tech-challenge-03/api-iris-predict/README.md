@@ -1,6 +1,6 @@
 # API de Machine Learning para Íris
 
-Este projeto implementa uma API baseada em FastAPI para prever espécies de flores Íris usando machine learning. A API é construída com FastAPI, Poetry e PostgreSQL, utilizando o conjunto de dados Iris para treinamento e previsões.
+Este projeto implementa uma API baseada em FastAPI para prever espécies de flores Íris. A API é construída com FastAPI, Poetry e PostgreSQL, utilizando o conjunto de dados Iris para treinamento e previsões.
 
 ## Funcionalidades
 
@@ -25,10 +25,18 @@ Este projeto implementa uma API baseada em FastAPI para prever espécies de flor
 ## Uso
 
 1. Importe o conjunto de dados usando o endpoint `/import-dataset`
+
+```bash
+curl -X 'POST' \
+  'https://desirable-expression-production.up.railway.app/iris/import-dataset' \
+  -H 'accept: application/json' \
+  -d ''
+```
+
 2. Faça previsões usando o endpoint `/predict` com entrada JSON:
 
 ```bash
-curl -X POST "http://localhost:8080/predict" \
+curl -X POST "https://desirable-expression-production.up.railway.app/iris/predict" \
      -H "Content-Type: application/json" \
      -d '{
            "sepal_length": 5.1,
@@ -45,5 +53,4 @@ curl -X POST "http://localhost:8080/predict" \
 - PostgreSQL
 - SQLAlchemy
 - Scikit-learn
-
-Para mais detalhes, consulte o código-fonte e os comentários em cada arquivo.
+- Uvicorn
