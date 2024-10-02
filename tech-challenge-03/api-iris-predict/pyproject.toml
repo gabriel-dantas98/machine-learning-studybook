@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "api-iris-predict"
+version = "0.1.0"
+description = ""
+authors = ["gabriel-dantas98 <gabriel.dantas@quintoandar.com.br>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.115.0"
+uvicorn = "^0.31.0"
+pandas = "^2.2.3"
+sqlalchemy = "^2.0.35"
+psycopg2-binary = "^2.9.9"
+joblib = "^1.4.2"
+scikit-learn = "^1.5.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
