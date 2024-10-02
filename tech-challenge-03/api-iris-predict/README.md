@@ -14,6 +14,16 @@ Este projeto implementa uma API baseada em FastAPI para prever espécies de flor
 - `POST /import-dataset`: Importar conjunto de dados Iris e treinar o modelo
 - `POST /predict`: Prever espécie de Íris com base em medições de entrada
 
+## Utilização do RandomForestClassifier
+
+O RandomForestClassifier é um modelo de ensemble que combina múltiplas árvores de decisão para fazer previsões. Algumas vantagens deste modelo incluem:
+
+- Alta precisão e robustez contra overfitting
+- Capacidade de lidar com dados não-lineares
+- Fornece importância de features
+
+O modelo é treinado usando o conjunto de dados Iris e é capaz de prever a espécie de uma flor Íris com base em suas medidas de sépala e pétala.
+
 ## Configuração
 
 1. Clone o repositório
