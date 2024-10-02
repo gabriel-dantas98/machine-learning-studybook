@@ -25,7 +25,7 @@ def import_productions(db: Session = Depends(get_database)) -> Any:
     return "Everything going ok!"
 
 @router.post("/predict")
-def predict_species(iris: schemas.IrisSpecies):
+def predict_species(iris: schemas.IrisSpeciesBase):
     input_data = iris.dict()
 
     iris_training_model = IrisTrainingModel()
