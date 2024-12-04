@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
 from api.main import api_router
-from core.config import PROJECT_NAME
+from core.config import PROJECT_NAME, MLFLOW_SERVER_URL
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 
