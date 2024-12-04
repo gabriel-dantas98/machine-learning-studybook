@@ -3,8 +3,9 @@ from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.resources import Resource
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
-from core.config import GRAFANA_OTLP_ENDPOINT, GRAFANA_INSTANCE_ID, GRAFANA_API_KEY
+from core.config import GRAFANA_OTLP_ENDPOINT, GRAFANA_INSTANCE_ID, GRAFANA_API_KEY, PROJECT_NAME
 
 # Configure OpenTelemetry tracer
 tracer_provider = TracerProvider()
@@ -24,6 +25,8 @@ otlp_exporter = OTLPSpanExporter(
 
 tracer_provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
 tracer = trace.get_tracer(__name__)
+
+resource = Resource.create({"service.name": PROJECT_NAME})
 
 # Logging and configuration
 logging.basicConfig(level=logging.INFO)
