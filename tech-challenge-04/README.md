@@ -19,11 +19,10 @@ O projeto implementa uma pipeline completa de machine learning, desde a coleta d
 - API RESTful para servir previsões
 - Observabilidade de performance do modelo em produção
 
-
 ## Principais Links
 
 - [Apresentação do Projeto Youtube](link-para-documentacao)
-- [URL da API Publica no Railway](link-para-video)
+- [URL da API Publica no Railway](https://reliable-creativity-production-946b.up.railway.app/)
 
 ## Estrutura do Projeto
 
@@ -54,16 +53,23 @@ O projeto implementa uma pipeline completa de machine learning, desde a coleta d
 ## Configuração e Instalação
 
 1. Clone o repositório
+
 2. Instale as dependências:
+
 ```bash
 poetry shell
 poetry install
 ```
-3. Suba os containers:
+
+3. Suba os dependências do projeto:
+
 ```bash
 docker compose up -d
+mlflow serve
 ```
+
 4. Execute a API:
+
 ```bash
 make run
 ```
