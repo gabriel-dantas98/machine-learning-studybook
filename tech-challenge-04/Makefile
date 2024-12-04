@@ -4,6 +4,7 @@ run-dev:
 run:
 	export OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true
 	export OTEL_LOGS_EXPORTER=otlp
+	export OTEL_SERVICE_NAME="API LSTM Finance Predict"
 	uvicorn main:app --reload --port 8080
 
 install:
