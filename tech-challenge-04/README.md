@@ -21,7 +21,7 @@ O projeto implementa uma pipeline completa de machine learning, desde a coleta d
 
 ## Principais Links
 
-- [Apresentação do Projeto Youtube](link-para-documentacao)
+- [Apresentação do Projeto Youtube](https://youtu.be/RSI3DE2_C7U)
 - [URL da API Publica no Railway](https://reliable-creativity-production-946b.up.railway.app/)
 
 ## Estrutura do Projeto
