@@ -12,7 +12,7 @@ ENV TRANSFORMERS_CACHE=/app/cache
 ENV UVICORN_PORT=8080
 ENV PYTHONPATH=${PYTHONPATH}:${PWD}
 
-RUN pip3 install poetry fastapi uvicorn pg8000
+RUN pip3 install poetry fastapi uvicorn pg8000 prometheus_fastapi_instrumentator
 RUN poetry config virtualenvs.create false
 RUN poetry install
 

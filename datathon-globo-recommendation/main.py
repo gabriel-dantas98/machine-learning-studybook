@@ -1,9 +1,12 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from prometheus_fastapi_instrumentator import Instrumentator
+
+
 from api.main import api_router
 from core.config import PROJECT_NAME
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from core.database import get_database, engine, Base
 
 Base.metadata.create_all(engine)
@@ -11,6 +14,7 @@ Base.metadata.create_all(engine)
 app = FastAPI(title=PROJECT_NAME, openapi_url="/openapi.json", debug=True)
 
 FastAPIInstrumentor().instrument_app(app)
+Instrumentator().instrument(app).expose(app)
 
 get_database()
 
