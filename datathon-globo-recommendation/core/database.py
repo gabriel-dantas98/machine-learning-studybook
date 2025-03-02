@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from core.config import TABLE_NAME
 
 CONNECTION_CLOUD_SQL = sqlalchemy.engine.url.URL.create(
-    drivername="postgresql",
+    drivername="postgresql+pg8000",
     username="datathon-globo-db",
     password="datathon-globo-db",
     database="datathon",
