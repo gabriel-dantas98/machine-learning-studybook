@@ -119,7 +119,7 @@ A seguir, a estrutura principal do projeto:
 - Python 3.10+
 - FastAPI (Framework API)
 - PostgreSQL + pgvector (Banco de dados + extensão para vetores)
-- Docker e Docker Compose (Containerização)
+- Docker e Docker Compose (Containerização e ambiente local)
 - Make (Automação de scripts e padronizaçãod o setup)
 - BERT PT-BR: neuralmind/bert-base-portuguese-casede dados PostgreSQL (com pgvector) e os demais serviços.
 - SQLAlchemy (ORM)
