@@ -1,20 +1,24 @@
 # Datathon Globo Recommendation
 
+<p align="center">
+  <img src="assets/readme-banner.webp">
+  <p align="center">
+  PROJETO DATATHON POS-TECH MLOPS
+  </p>
+</p>
+
 Este repositório contém um sistema de recomendação de notícias construído para o desafio **PosTech Datathon Globo**. A solução combina **FastAPI**, **PostgreSQL** (com extensão **pgvector** para embeddings) e **BERT em português** para fornecer recomendações personalizadas de notícias.
 
 ---
 
 ## Índice
+
 - [Datathon Globo Recommendation](#datathon-globo-recommendation)
   - [Índice](#índice)
   - [Visão Geral](#visão-geral)
-    - [Diagrama Simplificado da Arquitetura](#diagrama-simplificado-da-arquitetura)
+  - [Abordagem do desafio](#abordagem-do-desafio)
     - [Componentes Principais](#componentes-principais)
-  - [Arquitetura de Pastas](#arquitetura-de-pastas)
-  - [Recursos e EndpointsPOST	/news	Cria nova notícia](#recursos-e-endpointspostnewscria-nova-notícia)
-  - [Tecnologias e Dependências](#tecnologias-e-dependências)
-  - [Como Executar Localmente](#como-executar-localmente)
-    - [Subir serviços com Docker Compose](#subir-serviços-com-docker-compose)
+    - [Estrutura do Projeto](#estrutura-do-projeto)
 
 ---
 
@@ -26,32 +30,51 @@ O objetivo principal é **prever e recomendar notícias** que cada usuário poss
 2. **Recência**: notícias têm prazo de validade curto.
 3. **Personalização**: recomendações baseadas no histórico e nos embeddings semânticos (BERT).
 
-### Diagrama Simplificado da Arquitetura
+<p align="center">
+  <img src="assets/image.png">
+  <p align="center">
+  Diagrama Simplificado da Arquitetura
+  </p>
+</p>
 
-```mermaid
-flowchart LR
-  subgraph Client
-  A[Usuário/Cliente] -->|HTTP Requests| B[API FastAPI]
-  end
-  subgraph Backend
-  B --> D[BERT PT-BR<br>(Embeddings)]
-  B --> C[PostgreSQL + pgvector]
-  end
-  style A fill:#ffc107,stroke:#333,stroke-width:1px
-  style B fill:#c8e6c9,stroke:#333,stroke-width:1px
-  style C fill:#fff9c4,stroke:#333,stroke-width:1px
-  style D fill:#bbdefb,stroke:#333,stroke-width:1px
-```
+## Abordagem do desafio
+
+**O que, Por que, Como**
+
+**O que?**
+
+Pelo meu background ser mais de DevOps e Infraestrutura e atualmente estou iniciando na criação de RAG's internos no meu trabalho, decidi tentar usar uma abordagem diferente. Tentar utilizar um modelo pré-treinado com caracteristicas certas e usar recomendação usando consultas vetoriais de similaridade. Então teria um sistema de recomendação de notícias capaz de personalizar a experiência do usuário com base no histórico de leituras, combinando similaridade de conteúdo (via embeddings BERT) e aspectos colaborativos (popularidade).
+
+**Por que?**
+
+Cold-start: Precisamos de um método para recomendar itens mesmo sem histórico do usuário/notícia, usando conteúdo textual, o que me pareceu uma ótima oportunidade de utilizar representações vetoriais das noticiais.
+
+Recência: Notícias têm validade curta, exigindo fator de tempo e popularidade na recomendação, conseguindo embarcar isso no mecanismo na lógica de recomendação poderiamos lidar bem com a recência.
+
+Personalização: Permite atender a preferências únicas de cada leitor, melhorando a satisfação e o
+engajamento e melhorando a recomendação conforme o engajamento do leitor.
+
+**Como?**
+
+Geração de embeddings: Usamos BERT em português para conseguir pegar melhor nuanceas da nossa linguagem, para transformar títulos/corpos das notícias em vetores semânticos (armazenados no PostgreSQL via pgvector).
+
+Similaridade de Conteúdo: para usuários com histórico, calculamos o embedding do usuário (média das notícias lidas) e buscamos itens similares.
+
+Tendências: combinamos popularidade (contagem de leituras) e recência (data de publicação) para promover  notícias atuais.
+
+API: Disponibilizamos endpoints para inserir notícias, registrar leituras e retornar recomendações personalizadas.
 
 ### Componentes Principais
 
-- API FastAPI: expõe rotas para inserir notícias, registrar leituras e gerar recomendações.
-- PostgreSQL + pgvector: armazena dados de usuários/notícias, bem como embeddings para busca vetorial.
-- BERT em PT-BR: gera embeddings semânticos dos textos das notícias.
+**- API FastAPI:** API com rotas para inserir notícias, registrar leituras e gerar recomendações.
 
-## Arquitetura de Pastas
+**- PostgreSQL + pgvector:** Banco de Dados Relacional com uso de embeddings para buscas e comparações vetoriais.
 
-A seguir, a estrutura principal do projeto (omissões de cache e outros detalhes para brevidade):
+**- BERT em PT-BR:** gera embeddings semânticos dos textos das notícias.
+
+### Estrutura do Projeto
+
+A seguir, a estrutura principal do projeto:
 
 ```bash
 .
@@ -59,7 +82,7 @@ A seguir, a estrutura principal do projeto (omissões de cache e outros detalhes
 ├── Makefile
 ├── README.md
 ├── api
-│   ├── main.py                 # Ponto de entrada FastAPI
+│   ├── main.py
 │   └── routes
 │       ├── healthcheck.py
 │       ├── links.py
@@ -67,88 +90,46 @@ A seguir, a estrutura principal do projeto (omissões de cache e outros detalhes
 │       ├── raw_data.py
 │       ├── recommend.py
 │       └── users.py
-├── assets
-│   └── readme-headline-image.jpg
 ├── core
 │   ├── bert_embeddings.py
 │   ├── config.py
 │   ├── database.py
 │   ├── logging.py
 │   ├── observability.py
-├── datasources
-│   ├── train
-│   │   ├── news
-│   └── security.py
-├── datasourcesacao.csv
-│   ├── train
-│   │   ├── news
-│   │   └── ...
-│   └── validacao.csvpy
-├── db_models_.py
+├── db_models
 │   ├── News.py.yml
 │   ├── RawData.py
 │   ├── User.pyments
 │   └── __init__.pyipynb
-├── docker-compose.ymllock
+├── docker-compose.yml
 ├── main.py
 ├── notebook-experiments
 │   └── data_cleaning.ipynb
 ├── poetry.lock
-├── pyproject.tomlnit__.py
+├── pyproject.toml
 ├── schemas
 │   ├── News.py
 │   ├── Users.py
-│   └── __init__.pys pontos:**
-└── scripts
-
-```api/: contém o arquivo main.py (ponto de entrada do FastAPI) e as rotas em api/routes.
-iguração, conexão ao DB, geração de embeddings, etc.
-**Principais pontos:**db_models/: definição de modelos (ORM) de banco de dados.
-
-- **api/**: contém o arquivo main.py (ponto de entrada do FastAPI) e as rotas em api/routes.stração do container.
-- **core/**: módulos de configuração, conexão ao DB, geração de embeddings, etc.
-- **db_models/**: definição de modelos (ORM) de banco de dados.s (news, user, recommend, etc.). Alguns dos endpoints:
-- **schemas/**: modelos Pydantic para entrada/saída de dados.
-- **docker-compose.yml** e **Dockerfile**: contêm instruções para construção e orquestração do container.o
-
-## Recursos e EndpointsPOST	/news	Cria nova notícia
-usuário
-A API segue uma estrutura de rotas dividida por recursos (news, user, recommend, etc.). Alguns dos endpoints:tra leitura de notícia pelo usuário
-_id}	Recomenda notícias similares ao perfil do user
-| Método | Rota | Descrição |r_id}	Recomenda notícias em tendência
-|--------|------|-----------|
-| GET | /healthcheck/ping | Healthcheck simples |
-| POST | /news | Cria nova notícia |
-| POST | /user/{user_id}/read/{news_id} | Registra leitura de notícia pelo usuário || POST | /user | Cria novo usuário |
-| GET | /recommend/similar/{user_id} | Recomenda notícias similares ao perfil do user |mit=5
-| GET | /recommend/trending/{user_id} | Recomenda notícias em tendência |Retorna as top 5 notícias de tecnologia mais similares ao embedding do usuário ID=1.
-| GET | /raw_data | Loader de dados brutos (exemplo) |
-
-Exemplo de rota de recomendação (similaridade):
-
-`GET /recommend/similar/1?category=tecnologia&limit=5`FastAPI (Framework Web)
-+ pgvector (Banco de dados + extensão para vetores)
-Retorna as top 5 notícias de tecnologia mais similares ao embedding do usuário ID=1. (Containerização)
 
 ## Tecnologias e Dependências
 
-- Python 3.9+
-- FastAPI (Framework Web)
+- Python 3.10+
+- FastAPI (Framework API)
 - PostgreSQL + pgvector (Banco de dados + extensão para vetores)
-- Docker e Docker Compose (Containerização)Subir serviços com Docker Compose
-- Make (Automação de scripts)
+- Docker e Docker Compose (Containerização)
+- Make (Automação de scripts e padronizaçãod o setup)
 - BERT PT-BR: neuralmind/bert-base-portuguese-casede dados PostgreSQL (com pgvector) e os demais serviços.
 - SQLAlchemy (ORM)
 - PyTorch (execução do modelo BERT)
 
 ## Como Executar Localmente
-Instala as bibliotecas necessárias (dentro do container) para a API.
-
-### Subir serviços com Docker Compose
 
 ```bash
 docker-compose up
-```Sobe o servidor FastAPI em http://localhost:8000 (pode variar conforme a configuração do seu Docker Compose).
+make install
+make run
+```
+
+Sobe o servidor FastAPI em <http://localhost:8000>.
 
 Esse comando inicializa o banco de dados PostgreSQL (com pgvector) e os demais serviços.
-A seguir, alguns exemplos de uso prático dos endpoints via curl.

@@ -20,4 +20,6 @@ RUN python -c "from transformers import AutoTokenizer, AutoModel; \
                 AutoTokenizer.from_pretrained('neuralmind/bert-base-portuguese-cased'); \
                 AutoModel.from_pretrained('neuralmind/bert-base-portuguese-cased')"
 
+RUN tree
+
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
