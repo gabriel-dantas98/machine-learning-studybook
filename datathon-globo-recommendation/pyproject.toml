@@ -29,6 +29,7 @@ transformers = "^4.49.0"
 structlog = "^25.1.0"
 asyncio = "^3.4.3"
 pg8000 = "^1.31.2"
+cloud-sql-python-connector = {extras = ["pg8000"], version = "^1.17.0"}
 
 
 [build-system]
