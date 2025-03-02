@@ -23,19 +23,19 @@ SQLALCHEMY_DATABASE_URL = (
 print("DB_URL LOADED", SQLALCHEMY_DATABASE_URL)
 connector = Connector()
 
-def getconn():
+def get_connection():
     return connector.connect(
-        "gabsdevops:us-central1:datathon-globo-db",  # Nome da conexão da instância
-        "pg8000",
-        user="datathon-globo-db",
+        instance_connection_string="gabsdevops:us-central1:datathon-globo-db",  # Nome da conexão da instância
+        driver="pg8000",
+        user="postgres",
         password=os.environ.get("DB_PASSWORD"),
-        db="datathon"
+        db="postgres"
     )
 
 # engine = create_engine(SQLALCHEMY_DATABASE_URL)
 engine = sqlalchemy.create_engine(
     "postgresql+pg8000://",
-    creator=getconn,
+    creator=get_connection,
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
