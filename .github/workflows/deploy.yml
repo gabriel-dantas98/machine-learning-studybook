@@ -59,7 +59,7 @@ jobs:
           image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}
           # postgresql://datathon:datathon@localhost:6025/{TABLE_NAME}
           env_vars: |
-            DB_URL=postgresql://${{ env.DATABASE_USERNAME }}:${{ secrets.DATABASE_SECRET }}@/datathon?unix_socket=gabsdevops:us-central1:datathon-globo-db/datathon-globo-db
+            DB_URL=postgresql://${{ env.DATABASE_USERNAME }}:${{ secrets.DATABASE_SECRET }}@/${{ env.DATABASE_TABLE }}?host=/cloudsql/gabsdevops:us-central1:datathon-globo-db
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}

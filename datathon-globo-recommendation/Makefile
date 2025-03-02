@@ -7,6 +7,9 @@ run:
 	export OTEL_SERVICE_NAME=""API PosTech Datathon Globo Recommendation"
 	uvicorn main:app --reload --port 8080
 
+run:
+	uvicorn main:app  --host 0.0.0.0 --port 8080
+
 install:
 	poetry install
 
