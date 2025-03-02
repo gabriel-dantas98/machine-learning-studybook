@@ -129,7 +129,7 @@ def get_df_cleaned_train_data():
 
 def get_df_cleaned_news_data():
     log.info("Getting news data...")
-    news_files = glob(os.path.join("./datasources/train/news", "itens-*.csv"))
+    news_files = glob(os.path.join("./datasources/news", "itens-*.csv"))
     log.info(f"Found {len(news_files)} news files: {news_files}")
 
     dfs_news = []
