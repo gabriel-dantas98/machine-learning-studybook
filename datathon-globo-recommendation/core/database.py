@@ -19,6 +19,8 @@ SQLALCHEMY_DATABASE_URL = (
     else f"postgresql://datathon:datathon@localhost:6025/{TABLE_NAME}"
 )
 
+print("DB_URL LOADED", SQLALCHEMY_DATABASE_URL)
+
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

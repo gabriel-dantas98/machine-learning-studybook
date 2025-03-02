@@ -6,6 +6,7 @@ run:
 	export OTEL_LOGS_EXPORTER=otlp
 	export OTEL_SERVICE_NAME="API PosTech Datathon Globo Recommendation"
 	export ENVIRONMENT=development
+	export DB_URL="testando"
 
 	uvicorn main:app --reload --port 8080
 
