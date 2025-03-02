@@ -10,7 +10,7 @@ CONNECTION_CLOUD_SQL = sqlalchemy.engine.url.URL.create(
     username="datathon-globo-db",
     password="datathon-globo-db",
     database="datathon",
-    query={"unix_sock": "/cloudsql/gabsdevops:us-central1:datathon-globo-db/.s.PGSQL.5432"},
+    query={"host": "/cloudsql/gabsdevops:us-central1:datathon-globo-db/.s.PGSQL.5432"},
 )
 
 SQLALCHEMY_DATABASE_URL = (
