@@ -16,6 +16,7 @@ env:
   DATABASE_URL: 34.59.187.129
   DATABASE_TABLE: datathon
   DATABASE_USERNAME: datathon-globo-db
+  PYTHON_VERSION: "3.10"
 
 jobs:
   deploy:
@@ -28,6 +29,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.5.1
+          virtualenvs-create: true
+
+      - name: Cache Poetry dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
 
       - name: GCP Auth
         id: auth
