@@ -81,6 +81,7 @@ jobs:
           env_vars: |
             DB_URL=postgresql://${{ env.DATABASE_USERNAME }}:${{ secrets.DATABASE_SECRET }}@${{ env.DATABASE_URL }}/${{ env.DATABASE_TABLE }}?host=/cloudsql/gabsdevops:datathon-globo-db
             ENVIRONMENT=production
+            DB_PASSWORD=${{ secrets.DATABASE_SECRET }}
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}

@@ -14,8 +14,6 @@ CONNECTION_CLOUD_SQL = sqlalchemy.engine.url.URL.create(
     database="datathon",
     query={"host": "/cloudsql/gabsdevops:us-central1:datathon-globo-db"},
 )
-# postgresql+pg8000://datathon-globo-db:***@/datathon?host=/cloudsql/gabsdevops:us-central1:datathon-globo-db
-
 SQLALCHEMY_DATABASE_URL = (
     CONNECTION_CLOUD_SQL
     if os.environ.get("DB_URL")
