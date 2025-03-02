@@ -6,11 +6,12 @@ from sqlalchemy.orm import sessionmaker
 from core.config import TABLE_NAME
 
 CONNECTION_CLOUD_SQL = sqlalchemy.engine.url.URL.create(
+    drivername="postgresql",
     username="datathon-globo-db",
     password="datathon-globo-db",
     database="datathon",
-    query={"unix_sock": "/cloudsql/project:region:instance/.s.PGSQL.5432"},
-),
+    query={"unix_sock": "/cloudsql/gabsdevops:us-central1:datathon-globo-db/.s.PGSQL.5432"},
+)
 
 SQLALCHEMY_DATABASE_URL = (
     CONNECTION_CLOUD_SQL
