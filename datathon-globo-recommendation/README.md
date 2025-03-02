@@ -1,54 +1,50 @@
-# Stock Price Prediction API using LSTM
+# Globo Recommendation System - Datathon Challenge
 
 <p align="center">
-  <img src="assets/readme-headline-image.jpg">
+  <img src="assets/recommendation-system.jpg">
   <p align="center">
-  Este projeto é parte do Tech Challenge da Fase 4 da pós-graduação, focado em Deep Learning e IA. O objetivo é desenvolver um modelo preditivo utilizando redes neurais LSTM (Long Short-Term Memory) para prever o valor de fechamento de uma certa ação na bolsa de valores.
+  Este projeto foi desenvolvido durante o Datathon da Globo, com foco em sistemas de recomendação. O objetivo é criar um modelo que recomende conteúdos relevantes para usuários da plataforma Globoplay, melhorando a experiência do usuário e aumentando o engajamento.
   </p>
 </p>
 
 ## Visão Geral do Projeto
 
-O projeto implementa uma pipeline completa de machine learning, desde a coleta de dados até o deploy de uma API para previsão de preços de uma certa ação. O modelo utiliza redes neurais LSTM para capturar padrões temporais em dados históricos de preços de uma certa ação.
+O projeto implementa um sistema de recomendação completo para a plataforma Globoplay, utilizando técnicas avançadas de machine learning para analisar o comportamento dos usuários e recomendar conteúdos personalizados. O modelo considera histórico de visualizações, preferências explícitas e implícitas, e contexto do usuário para gerar recomendações precisas.
 
 ## Funcionalidades
 
-- Coleta automática de dados históricos de uma certa ação via Yahoo Finance
-- Pré-processamento e preparação dos dados para treinamento
-- Modelo LSTM para previsão de preços
-- API RESTful para servir previsões
-- Observabilidade de performance do modelo em produção
-
-## Principais Links
-
-- [Apresentação do Projeto Youtube](https://youtu.be/RSI3DE2_C7U)
-- [URL da API Publica no Railway](https://reliable-creativity-production-946b.up.railway.app/)
+- Processamento de dados de interação usuário-conteúdo
+- Análise de similaridade entre itens e preferências de usuários
+- Algoritmos de filtragem colaborativa e baseada em conteúdo
+- Modelo híbrido de recomendação com fatores contextuais
+- API RESTful para servir recomendações personalizadas
+- Dashboard para visualização de métricas de engajamento
 
 ## Estrutura do Projeto
 
-- `api/`: Código da API e rotas do serviço
+- `api/`: Código da API e rotas do serviço de recomendação
 - `assets/`: Recursos estáticos do projeto
-- `core/`: Componentes principais do sistema
-- `datasources/`: Fontes de dados e integrações
-- `training_models/`: Modelos de machine learning e scripts de treinamento
-- `schemas/`: Definições de schemas e modelos de dados
+- `data_processing/`: Scripts para processamento e limpeza dos dados
+- `models/`: Implementação dos algoritmos de recomendação
+- `evaluation/`: Métricas e ferramentas de avaliação dos modelos
+- `notebooks/`: Jupyter notebooks com análises exploratórias
+- `config/`: Arquivos de configuração do sistema
 - `utils/`: Funções utilitárias e helpers
 - `main.py`: Ponto de entrada da aplicação
-- `pyproject.toml` e `poetry.lock`: Gerenciamento de dependências com Poetry
-- `prometheus.yml`: Configuração do Prometheus para monitoramento
+- `pyproject.toml` e `poetry.lock`: Gerenciamento de dependências
 
 ## Tecnologias Utilizadas
 
 - Python 3.10
-- PyTorch para o modelo LSTM
+- PyTorch e TensorFlow para modelos de deep learning
+- Surprise e LightFM para algoritmos de recomendação
 - FastAPI para a API REST
-- Poetry para gerenciamento de dependências
+- Pandas e NumPy para processamento de dados
+- Scikit-learn para avaliação e métricas
 - Docker para containerização
-- yfinance para coleta de dados
-- Pandas e NumPy para manipulação de dados
-- Scikit-learn para métricas e processamento
-- MLflow para gerenciamento de experimentos e modelos
-- OpenTelemetry para observabilidade
+- MLflow para tracking de experimentos
+- PostgreSQL para armazenamento de dados
+- Plotly e Streamlit para visualizações
 
 ## Configuração e Instalação
 
@@ -61,42 +57,42 @@ poetry shell
 poetry install
 ```
 
-3. Suba os dependências do projeto:
+3. Configure o ambiente:
 
 ```bash
-docker compose up -d
-mlflow serve
+cp .env.example .env
+# Edite o arquivo .env com suas configurações
 ```
 
 4. Execute a API:
 
 ```bash
-make run
+python main.py
 ```
 
 ## Uso da API
 
-Pode acessar a documentação da API em http://localhost:8080/docs.
-E e utilizar os endpoints atraves da interface OpenAPI.
+A documentação da API está disponível em http://localhost:8000/docs, onde é possível testar endpoints como:
+
+- `/recommendations/user/{user_id}`: Obtém recomendações personalizadas para um usuário
+- `/recommendations/similar/{item_id}`: Encontra itens similares ao informado
+- `/feedback`: Recebe feedback sobre recomendações para melhorar o sistema
 
 ## Métricas de Avaliação
 
-O modelo é avaliado usando as seguintes métricas:
-- MAE (Mean Absolute Error)
-- RMSE (Root Mean Square Error)
-- MAPE (Mean Absolute Percentage Error)
+O sistema é avaliado usando métricas específicas para recomendação:
+- Precision@K e Recall@K
+- Mean Average Precision (MAP)
+- Normalized Discounted Cumulative Gain (NDCG)
+- Coverage e Diversidade das recomendações
+- Taxa de cliques (CTR) em ambiente de produção
 
-Todas registradas no MLFlow e Prometheus.
+## Desafios e Aprendizados
 
-## Monitoramento
-
-O sistema inclui monitoramento de:
-- Tempo de resposta da API
-- Acurácia das previsões
-- Utilização de recursos
-- Logs de erros e exceções
-
-Com a adição do uso de Tracing via OpenTelemetry.
+- Tratamento do cold start para novos usuários e conteúdos
+- Balanceamento entre exploração e explotação nas recomendações
+- Incorporação de contexto (horário, dispositivo, localização) no modelo
+- Escalabilidade para milhões de usuários e conteúdos
 
 ## Autor
 

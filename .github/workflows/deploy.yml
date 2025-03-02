@@ -13,6 +13,9 @@ env:
   REPOSITORY: datathon-api-globo-recommender
   SERVICE: datathon-api-globo-recommender
   REGION: us-central1
+  DATABASE_URL: 34.59.187.129
+  DATABASE_TABLE: datathon
+  DATABASE_USERNAME: datathon-globo-db
 
 jobs:
   deploy:
@@ -54,10 +57,9 @@ jobs:
           service: ${{ env.SERVICE }}
           region: ${{ env.REGION }}
           image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}
-          # NOTE: You can also set env variables here:
-          #  env_vars: |
-          #  NODE_ENV=production
-          #  TOKEN_EXPIRE=6400
+          # postgresql://datathon:datathon@localhost:6025/{TABLE_NAME}
+          env_vars: |
+            DB_URL=postgresql://${{ env.DATABASE_USERNAME }}:${{ secrets.DATABASE_PASSWORD }}@${{ env.DATABASE_URL }}:5432/${{ env.DATABASE_TABLE }}
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
