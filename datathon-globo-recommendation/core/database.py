@@ -1,11 +1,19 @@
 import os
+import sqlalchemy
 from sqlalchemy import create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from core.config import TABLE_NAME
 
+CONNECTION_CLOUD_SQL = sqlalchemy.engine.url.URL.create(
+    username="datathon-globo-db",
+    password="datathon-globo-db",
+    database="datathon",
+    query={"unix_sock": "/cloudsql/project:region:instance/.s.PGSQL.5432"},
+),
+
 SQLALCHEMY_DATABASE_URL = (
-    os.environ.get("DB_URL")
+    CONNECTION_CLOUD_SQL
     if os.environ.get("DB_URL")
     else f"postgresql://datathon:datathon@localhost:6025/{TABLE_NAME}"
 )
