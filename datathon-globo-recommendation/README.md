@@ -19,6 +19,8 @@ Este repositório contém um sistema de recomendação de notícias construído 
   - [Abordagem do desafio](#abordagem-do-desafio)
     - [Componentes Principais](#componentes-principais)
     - [Estrutura do Projeto](#estrutura-do-projeto)
+  - [Tecnologias e Dependências](#tecnologias-e-dependências)
+  - [Como Executar Localmente](#como-executar-localmente)
 
 ---
 
@@ -110,6 +112,7 @@ A seguir, a estrutura principal do projeto:
 ├── schemas
 │   ├── News.py
 │   ├── Users.py
+```
 
 ## Tecnologias e Dependências
 
