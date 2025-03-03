@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - $default-branch
-  pull_request:
-    branches: [ '*' ]
 
 env:
   PROJECT_ID: gabsdevops
