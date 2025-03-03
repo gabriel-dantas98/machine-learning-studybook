@@ -103,7 +103,6 @@ def recommend_trending(
     scored.sort(key=lambda x: x[0], reverse=True)
     top = scored[:limit]
 
-    # Return the recommended items
     log.info(f"Returning {len(top)} trending recommendations for user {user_id}")
     if user_emb is None:
         log.info(

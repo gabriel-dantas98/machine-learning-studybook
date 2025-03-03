@@ -4,6 +4,6 @@ from fastapi.responses import RedirectResponse
 router = APIRouter()
 
 
-@router.get("/github")
-def mlflow() -> str:
-    return RedirectResponse("www.github.com")
+@router.get("/repository")
+def github_path() -> str:
+    return RedirectResponse("https://github.com/gabriel-dantas98/machine-learning-studybook/blob/main/datathon-globo-recommendation/README.md")

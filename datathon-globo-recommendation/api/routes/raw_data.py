@@ -15,42 +15,42 @@ router = APIRouter()
 @router.get("")
 def loader(db: Session = Depends(get_database)) -> str:
     log.info("Loading raw data into database...")
-    # df_train_data = get_df_cleaned_train_data()
+    df_train_data = get_df_cleaned_train_data()
     df_news_data = get_df_cleaned_news_data()
     log.info("Done raw data into database...")
 
-    # train_original_count = len(df_train_data)
+    train_original_count = len(df_train_data)
     news_original_count = len(df_news_data)
 
-    # log.info(df_train_data.head())
+    log.info(df_train_data.head())
     log.info(df_news_data.head())
 
     try:
         log.info(
             f"Clearing existing data from {RawUsers.__tablename__} and {RawNews.__tablename__}..."
         )
-        # db.query(RawUsers).delete()
+        db.query(RawUsers).delete()
         db.query(RawNews).delete()
         db.commit()
 
-        # log.info(
-        #     f"Bulk inserting {len(df_train_data)} user records to database table {RawUsers.__tablename__}..."
-        # )
+        log.info(
+            f"Bulk inserting {len(df_train_data)} user records to database table {RawUsers.__tablename__}..."
+        )
         chunk_size = 5000
-        # total_records = 0
+        total_records = 0
 
-        # for i in range(0, len(df_train_data), chunk_size):
-        #     chunk = df_train_data.iloc[i : i + chunk_size]
-        #     records = chunk.to_dict(orient="records")
-        #     db.bulk_insert_mappings(RawUsers, records)
-        #     db.commit()
+        for i in range(0, len(df_train_data), chunk_size):
+            chunk = df_train_data.iloc[i : i + chunk_size]
+            records = chunk.to_dict(orient="records")
+            db.bulk_insert_mappings(RawUsers, records)
+            db.commit()
 
-        #     total_records += len(records)
-        #     log.info(f"Committed {total_records} user records so far")
+            total_records += len(records)
+            log.info(f"Committed {total_records} user records so far")
 
-        # log.info(
-        #     f"Successfully loaded {total_records} user records into {RawUsers.__tablename__}"
-        # )
+        log.info(
+            f"Successfully loaded {total_records} user records into {RawUsers.__tablename__}"
+        )
 
         log.info(
             f"Bulk inserting {len(df_news_data)} news records to database table {RawNews.__tablename__}..."
@@ -74,9 +74,9 @@ def loader(db: Session = Depends(get_database)) -> str:
         news_db_count = db.query(RawNews).count()
 
         log.info("Data loading summary:")
-        # log.info(
-        #     f"Users: Original dataset had {train_original_count} rows, {users_db_count} rows inserted into database"
-        # )
+        log.info(
+            f"Users: Original dataset had {train_original_count} rows, {users_db_count} rows inserted into database"
+        )
         log.info(
             f"News: Original dataset had {news_original_count} rows, {news_db_count} rows inserted into database"
         )

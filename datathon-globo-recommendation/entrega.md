@@ -4,4 +4,4 @@ https://github.com/gabriel-dantas98/machine-learning-studybook/tree/main/datatho
 
 Link para a gravação da demonstração:
 
-https://youtu.be/RSI3DE2_C7U
+https://youtu.be/gToJFxV3N1I

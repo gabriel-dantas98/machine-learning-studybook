@@ -86,15 +86,18 @@ def user_read_news(user_id: int, news_hash: str, db: Session = Depends(get_datab
                     new_hash=db_raw_news.page.strip(),
                     published_at=db_raw_news.issued,
                     embedding=embedding.tolist(),
+                    popularity=0,
                 )
-
-        # Log the popularity update for the news
+        # Initialize popularity if it's None
+        if db_news.popularity is None:
+            db_news.popularity = 0
+            
         log.debug(
             f"Increasing popularity for news {news_hash} from {db_news.popularity} to {db_news.popularity + 1}"
         )
+
         db_news.popularity += 1
 
-        # Log the embedding extraction process
         log.debug(f"Getting embedding for news {news_hash}")
         current_new_embedding = (
             np.array(db_news.embedding, dtype=np.float32)

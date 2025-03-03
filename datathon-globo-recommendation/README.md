@@ -15,6 +15,7 @@ Este repositório contém um sistema de recomendação de notícias construído 
 
 - [Datathon Globo Recommendation](#datathon-globo-recommendation)
   - [Índice](#índice)
+  - [Principais Links](#principais-links)
   - [Visão Geral](#visão-geral)
   - [Abordagem do desafio](#abordagem-do-desafio)
     - [Componentes Principais](#componentes-principais)
@@ -23,6 +24,11 @@ Este repositório contém um sistema de recomendação de notícias construído 
   - [Como Executar Localmente](#como-executar-localmente)
 
 ---
+
+## Principais Links
+
+- [Apresentação do Projeto Youtube](https://youtu.be/gToJFxV3N1I)
+- [URL da API Publica usando Google Cloud Run](https://datathon-api-globo-recommender-916602653960.us-central1.run.app/docs)
 
 ## Visão Geral
 
@@ -131,6 +137,11 @@ A seguir, a estrutura principal do projeto:
 docker-compose up
 make install
 make run
+
+# call /raw_data for load data to database
+# call /news/charge and /users/charge for first input embeddings
+
+# everything is ready for /recommend endpoints
 ```
 
 Sobe o servidor FastAPI em <http://localhost:8000>.
